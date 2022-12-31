@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <body>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>House Price Prediction</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+        	$(window).load(function() {
+			  
+			  console.log("document loaded" );
+			  
+			  $.get("{{ url_for('get_location_names') }}",
+			    function (data, status) {
+			      console.log("got response for get_location_names request");
+			      console.log(data)
+			      if(data) {
+			          var locations = data.locations;
+			          console.log(locations)
+			          var uiLocations = document.getElementById("uiLocations");
+			          $('#uiLocations').empty();
+			          for(var i in locations) {
+			              var opt = new Option(locations[i]);
+			              $('#uiLocations').append(opt);
+			          }
+			      }
+			  });
+
+			});
+			
+        </script>
+        </Title> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style> 
+        /* For mobile phones: */
+        [class*="col-"] {
+        width: 100%;
+        }
+
+        @media only screen and (min-width: 768px) {
+        /* For desktop: */
+        .col-1 {width: 8.33%;}
+        .col-2 {width: 16.66%;}
+        .col-3 {width: 25%;}
+        .col-4 {width: 33.33%;}
+        .col-5 {width: 41.66%;}
+        .col-6 {width: 50%;}
+        .col-7 {width: 58.33%;}
+        .col-8 {width: 66.66%;}
+        .col-9 {width: 75%;}
+        .col-10 {width: 83.33%;}
+        .col-11 {width: 91.66%;}
+        .col-12 {width: 100%;}
+        }
+        
+        body, html {
+            height: 80%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            }
+
+            * {
+            box-sizing: border-box;
+            }
+
+        .bg-image {
+            /* The image used */
+            background-image: url("https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?cs=srgb&dl=pexels-binyamin-mellish-106399.jpg&fm=jpg&_gl=1*1b5rprq*_ga*MTcyMDQyOTY5MS4xNjcwNjAxNDA1*_ga_8JE65Q40S6*MTY3MTAzNzE0My4yLjEuMTY3MTAzNzg5OC4wLjAuMA..");
+
+            /* Add the blur effect */
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+
+            /* Full height */
+            height: 180%;
+            width: 100;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            }
+
+        .bg-text {
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0, 0.4); 
+            color: white;
+            font-weight: bold;
+            border: 3px solid #f1f1f1;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            width: 100%;
+            height: 120%;
+            padding: 10px;
+            text-align:center;
+        }
+        </style>
+        <div class="bg-image"></div>
+        <center>
+            <div class="bg-text">
+            <h1 style="color: #ffffff;font-size:50px;font-family:sans-serif"><b> Find Your Best Property </b></h1>
+            <div class="container">
+                <form action="\predict_home_price" method="POST" action="{{ url_for('predict_home_price') }}">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+                                        <h1 style="color: #ffffff;font-size:20px;font-family:sans-serif"><b> City : Banglore </b></h1>
+                                        <label style="font-size:10px;font-family:verdana" class="card-title" for="loc"><b>LOCATION : </b></label>
+                                        <select style="font-size:10px" class="location" name="loc" id="uiLocations" >
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <br><br>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <label style="font-size:10px;font-family:verdana" class="card-title"><b>AREA (Square Feet) : </b></label>
+                                    <!-- <input type="number" name="someid" placeholder="Enter Area" /> -->
+                                    <input style="font-size:10px" type="number" name="sqft" id="sqft" required="required" placeholder="Enter Area"><br>
+                                    <h1 style="color:rgb(255, 255, 255);font-size:12px;">Eg: 1200, 1800</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <label style="font-size:10px;font-family:verdana" class="card-title"><b>BHK : </b></label>
+                                    <input style="font-size:10px" type="number" name="bhk" id="bhk" required="required" placeholder="Enter BHK"><br>
+                                    <h1 style="color:rgb(255, 255, 255);font-size:8px;">Eg: 2, 4</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <label style="font-size:10px;font-family:verdana" class="card-title"><b>BATHROOMS : </b></label>
+                                    <input style="font-size:10px" type="number" name="bath" id="bath" required="required" placeholder="Enter Number of Bathrooms"><br>
+                                    <h1 style="color:rgb(255, 255, 255);font-size:8px;">Eg: 2, 4</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit -->
+                    <style>
+                        .button {
+                            display: inline-block;
+                            border-radius: 4px;
+                            background-color: #278ed2;
+                            border: none;
+                            color: #FFFFFF;
+                            text-align: center;
+                            font-size: 28px;
+                            padding: 20px;
+                            width: 250px;
+                            transition: all 0.5s;
+                            cursor: pointer;
+                            margin: 5px;
+                            }
+                    .button span {
+                        cursor: pointer;
+                        display: inline-block;
+                        position: relative;
+                        transition: 0.5s;
+                        }
+
+                        .button span:after {
+                        content: '\00bb';
+                        position: absolute;
+                        opacity: 0;
+                        top: 0;
+                        right: -20px;
+                        transition: 0.5s;
+                        }
+
+                        .button:hover span {
+                        padding-right: 25px;
+                        }
+
+                        .button:hover span:after {
+                        opacity: 1;
+                        right: 0;
+                        }
+                    </style>
+                    <button style="font-size:20px;vertical-align:middle;font-family:verdana" type="submit" value="Submit" class="button"><span>Estimate Price </span></button>
+                    <br><br>
+                    <div style="font-size:25px;font-family:verdana" id="box">{{ prediction_text }}</div>&nbsp;
+                    <!-- <div style="font-size:25px;font-family:verdana" class="card-title">Lakhs</div> -->
+                <center>
+                <br>
+                <p>© Ashutosh Rajput</p>
+            </div>
+            </div>
+    </body>
+</html>
